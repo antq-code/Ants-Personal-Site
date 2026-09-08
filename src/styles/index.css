@@ -98,6 +98,7 @@ SECTION COMPONENT STYLING
 
 .section-title {
   font-size: clamp(24px, 4vw, 40px);
+  margin-top: 0;
   margin-bottom: var(--space16);
 }
 

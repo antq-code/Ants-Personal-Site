@@ -1,5 +1,5 @@
-/* Floating pill nav - frosted purple glass, AQ logo dead-center,
-   sits above everything except the loading intro (z-index: 100) 
+/* Floating pill nav - frosted purple glass, AQ logo on the left, links on the right,
+   sits above everything except the loading intro (z-index: 100)
 */
 .floating-nav {
   position: fixed;
@@ -17,8 +17,10 @@
   /* Keeps a fixed 24px breathing room from each viewport edge instead of wrapping to a second row */
   max-width: calc(100vw - 48px);
   gap: clamp(6px, 2vw, 24px);
-  padding: clamp(6px, 1.2vw, 12px) clamp(10px, 2.4vw, 24px);
-  border-radius: 20px;
+  --nav-v-padding: clamp(6px, 1.2vw, 12px);
+  padding: var(--nav-v-padding) clamp(10px, 2.4vw, 24px);
+  --nav-radius: 20px;
+  border-radius: var(--nav-radius);
   background: rgba(20,20,20,0.2);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(18px);
@@ -53,7 +55,9 @@
   text-decoration: none;
   display: inline-block;
   padding: clamp(2px, 0.5vw, 4px) clamp(4px, 1.2vw, 10px);
-  border-radius: 20px;
+  /* Concentric with the bar: inner radius = outer radius minus the gap to its edge,
+     so the button's curve nests inside the bar's curve instead of just matching it */
+  border-radius: calc(var(--nav-radius) - var(--nav-v-padding));
   border: 1px solid transparent;
   transition: transform 0.2s ease, color 0.2s ease, filter 0.2s ease,
     border-color 0.2s ease, box-shadow 0.2s ease;

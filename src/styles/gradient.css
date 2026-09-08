@@ -89,19 +89,25 @@ body {
   pointer-events: none;
 }
 
-/* Grain overlay - fine noise texture on top of the color layers, tiled at a
-   fixed size so grain scale stays constant regardless of section height */
+/* Grain overlay - fine noise texture on top of the color layers.
+   grainResized.jpg (a photographed noise texture) turned out not to be
+   usable for tiling: it has its own large-scale cloudy tonal variation, not
+   uniform pixel noise, so any tile size just repeats that same gradient
+   shape and reads as a visible seam or grid instead of grain. Generating the
+   noise procedurally with SVG feTurbulence sidesteps this entirely -
+   stitchTiles="stitch" makes the pattern mathematically seamless at the
+   tile boundary, so it repeats with no visible edge at any tile size. */
 .aura-grain {
   position: absolute;
   inset: 0;
-  background-image: url("../assets/grainResized.jpg");
-  width: 100vw;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 120px 120px;
   background-repeat: repeat;
   /* overlay/soft-light both collapse to invisible on near-black bases (their math
      scales toward zero as the base darkens) - screen keeps grain visible at every
      luminance, including the near-black gradient at the bottom of the aura */
   mix-blend-mode: screen;
-  opacity: 0.08;
+  opacity: 0.15;
   pointer-events: none;
 }
 
@@ -115,6 +121,31 @@ body {
   height: 28vh;
   background: linear-gradient(to bottom, var(--bg-void) 0%, transparent 100%);
   pointer-events: none;
+}
+
+/* Mirrors .aura-fade-top at the bottom - without it, overflow:hidden on .aura-bg
+   hard-clips the blurred color layers right at the box edge instead of letting
+   them taper off, so the very bottom reads as a seam instead of a smooth fade */
+.aura-fade-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28vh;
+  background: linear-gradient(to top, var(--bg-void) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* The "use Npx on desktop" blur values above were never actually wired up -
+   on wide/tall viewports the under-blurred layers show harder gradient edges
+   instead of blending smoothly, most visible once the page grows past 100vh. */
+@media (min-width: 1024px) {
+  .aura-layer-1 { filter: blur(122px); }
+  .aura-layer-2 { filter: blur(108px); }
+  .aura-layer-3 { filter: blur(101px); }
+  .aura-layer-4 { filter: blur(252px); }
+  .aura-layer-5 { filter: blur(115px); }
+  .aura-layer-6 { filter: blur(198px); }
 }
 
 /* Content wrapper - keep it above the absolute layers, and spread

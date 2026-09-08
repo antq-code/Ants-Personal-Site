@@ -19,7 +19,7 @@ export default function Hero() {
               <MagicRings
               color="rgb(140, 82, 254)"
               colorTwo="rgb(229, 174, 254)"
-              ringCount={6}
+              ringCount={4}
               speed={1.5}
               attenuation={20}
               lineThickness={2.5}

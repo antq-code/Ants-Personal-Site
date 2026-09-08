@@ -1,0 +1,134 @@
+.projectGallery {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space40);
+  margin-top: var(--space24);
+  flex-wrap: wrap;
+}
+
+.projectGalleryGrid {
+  flex: 1 1 380px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space16);
+}
+
+.projectGalleryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  appearance: none;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  /* scale + glow reuse the exact hover-scale value from Nav.css and the
+     drop-shadow from index.css's .glow-on-hover, applied via selection state */
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.projectGalleryItem--selected {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 12px var(--accent-glow));
+}
+
+.projectGalleryItemImage {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px dashed rgba(221, 196, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  transition: border-color 0.2s ease;
+}
+
+.projectGalleryItem--selected .projectGalleryItemImage {
+  border-color: var(--accent-soft);
+}
+
+.projectGalleryItemTitle {
+  font-size: 0.8rem;
+  color: var(--text);
+}
+
+.projectGalleryDetail {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space16);
+}
+
+.projectGalleryCarousel {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(221, 196, 255, 0.16);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.projectGalleryCarouselSlide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.projectGalleryCarouselSlide--active {
+  opacity: 1;
+}
+
+.projectGalleryCarouselDots {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.projectGalleryCarouselDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid rgba(221, 196, 255, 0.4);
+  background: transparent;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.projectGalleryCarouselDot--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.2);
+}
+
+.projectGalleryInfo .techCardHeader {
+  min-height: 0;
+}
+
+.projectGalleryInfo .techCardRole {
+  min-height: 0;
+}
+
+@media (max-width: 800px) {
+  .projectGallery {
+    flex-direction: column;
+  }
+
+  .projectGalleryGrid {
+    width: 100%;
+  }
+}

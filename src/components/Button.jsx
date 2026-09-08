@@ -1,6 +1,6 @@
 import './Button.css';
 
-export default function Button({ children, onClick, href, type = 'button', target }) {
+export default function Button({ children, onClick, href, type = 'button', target, disabled = false }) {
   const className = 'btn glow-on-hover';
 
   if (href) {
@@ -13,7 +13,7 @@ export default function Button({ children, onClick, href, type = 'button', targe
   }
 
   return (
-    <button type={type} onClick={onClick} className={className}>
+    <button type={type} onClick={onClick} className={className} disabled={disabled}>
       {children}
     </button>
   );

@@ -1,0 +1,80 @@
+.techGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: var(--space24);
+  column-gap: 40px;
+  margin-top: var(--space24);
+}
+
+.techCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space16);
+}
+
+.techCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* reserves room for a 2-line title so shorter titles don't leave the row above
+     the image starting at a different height than a card with a longer title */
+  min-height: 64px;
+}
+
+.techCardTitle {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.techCardDate {
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.techCardRole {
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--text);
+  /* reserves ~2 lines so the image below starts at the same height regardless
+     of how long any individual card's role text happens to be */
+  min-height: 2.6em;
+}
+
+.techCardImage {
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 1px dashed rgba(221, 196, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.techStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.techStack li {
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(221, 196, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.techCardDescription {
+  color: var(--text);
+  font-size: 0.9rem;
+  margin: 0;
+}

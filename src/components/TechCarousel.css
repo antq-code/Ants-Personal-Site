@@ -1,0 +1,98 @@
+.techCarousel {
+  margin-top: var(--space24);
+}
+
+.techCarouselTrack {
+  display: flex;
+  gap: 40px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* we drive the drag entirely via pointer events below, so the browser
+     shouldn't also try to natively pan/scroll the track on touch */
+  touch-action: none;
+  cursor: grab;
+  scrollbar-width: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.techCarouselTrack:active {
+  cursor: grabbing;
+}
+
+.techCarouselTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.techCarouselSlide {
+  flex: 0 0 calc((100% - 2 * 40px) / 3);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.techCarouselSlide .techCard {
+  height: 100%;
+  gap: 8px;
+  padding: var(--space8) 0;
+}
+
+.techCarouselSlide .techCardHeader {
+  min-height: 44px;
+  gap: 2px;
+}
+
+.techCarouselSlide .techCardTitle {
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.techCarouselSlide .techCardDate {
+  font-size: 0.6rem;
+}
+
+.techCarouselSlide .techCardRole {
+  font-size: 0.68rem;
+  min-height: 2.4em;
+}
+
+.techCarouselSlide .techCardImage {
+  font-size: 0.6rem;
+}
+
+.techCarouselSlide .techStack {
+  gap: 4px;
+}
+
+.techCarouselSlide .techStack li {
+  font-size: 0.58rem;
+  padding: 2px 6px;
+}
+
+.techCarouselSlide .techCardDescription {
+  font-size: 0.68rem;
+}
+
+.techCarouselDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: var(--space16);
+}
+
+.techCarouselDot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(221, 196, 255, 0.4);
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.techCarouselDot--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.2);
+}

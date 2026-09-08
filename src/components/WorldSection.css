@@ -23,7 +23,9 @@ SECTION PLACEHOLDERS: For spacing and layout purposes to re-use
 */
 .sectionPlaceholder {
   display: flex;
-  align-items: center;
+  /* top-aligned (not center): the image's top edge should line up with the
+     heading at the top of the text column, not float centered against it */
+  align-items: flex-start;
   gap: var(--space40);
   flex-wrap: wrap;
 }
@@ -38,7 +40,7 @@ SECTION PLACEHOLDERS: For spacing and layout purposes to re-use
   min-width: 260px;
   max-width: 480px;
   width: 100%;
-  height: auto;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   border-radius: 12px;
 }

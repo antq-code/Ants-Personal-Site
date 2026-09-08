@@ -1,11 +1,19 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import Button from './Button';
 import './Contact.css';
 
 const GITHUB_URL = 'https://github.com/aRandomAsianAnt';
 const LINKEDIN_URL = 'https://www.linkedin.com/in/antonyrquach/';
 const CONTACT_EMAIL = 'AntonyRQuach@gmail.com';
+// Gmail's web compose view - opens straight into a new message in the visitor's
+// browser instead of relying on a mailto: handler being registered on their machine
+const GMAIL_COMPOSE_URL = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(CONTACT_EMAIL)}`;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 function GithubIcon() {
   return (
@@ -35,7 +43,7 @@ function MailIcon() {
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,19 +59,31 @@ export default function Contact() {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) {
-      setStatus('');
+      setStatus('idle');
       return;
     }
 
-    const subject = `Portfolio contact from ${form.name}`;
-    const body = `${form.message}\n\n— ${form.name} (${form.email})`;
-    const mailtoUrl = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-    window.location.href = mailtoUrl;
-    setStatus('Opening your email client to send this message…');
+    setStatus('sending');
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: form.name,
+          from_email: form.email,
+          message: form.message,
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY }
+      );
+      setStatus('sent');
+      setForm({ name: '', email: '', message: '' });
+    } catch (err) {
+      console.error('EmailJS send failed:', err);
+      setStatus('error');
+    }
   };
 
   return (
@@ -108,8 +128,17 @@ export default function Contact() {
         </label>
 
         <div className="contactSubmitRow">
-          <Button type="submit">Send Message</Button>
-          {status && <span className="contactStatus">{status}</span>}
+          <Button type="submit" disabled={status === 'sending'}>
+            {status === 'sending' ? 'Sending…' : 'Send Message'}
+          </Button>
+          {status === 'sent' && (
+            <span className="contactStatus">Message sent — thanks for reaching out!</span>
+          )}
+          {status === 'error' && (
+            <span className="contactError">
+              Something went wrong sending that. Try again, or email {CONTACT_EMAIL} directly.
+            </span>
+          )}
         </div>
       </form>
 
@@ -122,7 +151,7 @@ export default function Contact() {
           <LinkedinIcon />
           LinkedIn
         </Button>
-        <Button href={`mailto:${CONTACT_EMAIL}`}>
+        <Button href={GMAIL_COMPOSE_URL} target="_blank">
           <MailIcon />
           Gmail
         </Button>
