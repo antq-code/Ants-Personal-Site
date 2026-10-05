@@ -1,4 +1,4 @@
-import me from '../assets/me.jpg';
+import linkedinProfile from '../assets/linkedProfile.png';
 
 export default function AboutMe() {
   return (
@@ -13,7 +13,7 @@ export default function AboutMe() {
           Add a second paragraph here.
         </p>
       </div>
-      <img src={me} alt="Portrait of Antony Quach" className="sectionPlaceholderImage" />
+      <img src={linkedinProfile} alt="Portrait of Antony Quach" className="sectionPlaceholderImage" />
     </div>
   );
 }

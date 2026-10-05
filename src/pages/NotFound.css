@@ -1,0 +1,36 @@
+.notFoundPage {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.notFoundBackground {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Dims the photo so the white heading/button stay legible, same intent as
+   Hero's .heroFade - darker toward the edges, clearest at the center. */
+.notFoundFade {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(16, 14, 11, 0.55) 0%, rgba(16, 14, 11, 0.88) 100%);
+  z-index: 1;
+}
+
+.notFoundContent {
+  position: relative;
+  z-index: 2;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  padding: var(--space24);
+}

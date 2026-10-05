@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
+import background from '../assets/antPurpleBG_convertedJPG.jpg';
 import '../components/Button.css';
+import './NotFound.css';
 
 export default function NotFound() {
   return (
-    <div className="aura-bg">
-      <div className="aura-layer-1" aria-hidden="true" />
-      <div className="aura-layer-2" aria-hidden="true" />
-      <div className="aura-layer-5" aria-hidden="true" />
-      <div className="aura-grain" aria-hidden="true" />
-      <div className="aura-content" style={{ justifyContent: 'center', alignItems: 'center', gap: 24 }}>
+    <div className="notFoundPage">
+      <img src={background} alt="" className="notFoundBackground" />
+      <div className="notFoundFade" aria-hidden="true" />
+      <div className="notFoundContent">
         <h1 className="section-title">Page coming soon</h1>
         <Link to="/" className="btn glow-on-hover">
           Back home

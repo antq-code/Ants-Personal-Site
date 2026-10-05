@@ -9,7 +9,7 @@
 .techCard {
   display: flex;
   flex-direction: column;
-  gap: var(--space16);
+  gap: 8px;
 }
 
 .techCardHeader {

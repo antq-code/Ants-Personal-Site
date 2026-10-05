@@ -7,11 +7,12 @@
   display: grid;
   place-items: center;
   background: #020104;
+  overflow: hidden; /* the reveal phase scales the logo well past the viewport edge */
 }
 
 .loading-intro--exit {
   pointer-events: none;
-  animation: curtain-fade 900ms ease forwards;
+  animation: curtain-fade 1250ms ease-in forwards;
 }
 
 .logo-shell {
@@ -20,6 +21,12 @@
   aspect-ratio: 1;
 }
 
+/* Both the glow and the logo play one continuous, single timeline declared at
+   mount - ignite (0%-58.5%) flows straight into the grand reveal (58.5%-100%)
+   - rather than swapping animation-name via a class toggle mid-flight. That
+   swap approach depends on the browser correctly restarting an animation
+   whose name changes after it's already finished and been fill-held; baking
+   both phases into one @keyframes avoids that dependency entirely. */
 .logo-glow {
   position: absolute;
   inset: -45%;
@@ -28,7 +35,7 @@
   filter: blur(18px);
   opacity: 0;
   pointer-events: none;
-  animation: glow-pulse 8.5s ease-in-out forwards;
+  animation: glow-sequence 3000ms linear forwards;
 }
 
 .intro-logo {
@@ -39,39 +46,95 @@
   opacity: 0;
   transform: scale(0.35);
   filter: drop-shadow(0 0 0 rgb(255 255 255 / 0%));
-  animation: logo-ignite 8.5s cubic-bezier(0.16, 0.76, 0.19, 1) forwards;
+  animation: logo-sequence 3000ms linear forwards;
 }
 
-@keyframes logo-ignite {
-  0% { opacity: 0; transform: scale(0.35); }
-  10% { opacity: 1; transform: scale(0.55); }
-  25% { transform: scale(0.48); }
-  38% { transform: scale(0.58); }
-  50% { transform: scale(0.5); filter: drop-shadow(0 0 6px rgb(255 255 255 / 60%)); }
-  75% { transform: scale(1.25); filter: drop-shadow(0 0 40px rgb(167 76 255 / 95%)) brightness(1.8); }
-  90% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgb(167 76 255 / 70%)) brightness(1.2); }
-  100% { opacity: 1; transform: scale(1); filter: drop-shadow(0 0 10px rgb(167 76 255 / 50%)) brightness(1); }
+/* 1. small X-logo in black screen, 2. glows and settles (0% - 58.5%, i.e. the
+   first 1750ms of the 3000ms timeline) - 3. grand reveal: rapidly balloons
+   past the screen edges while fading out (58.5% - 100%, the last 1250ms) */
+@keyframes logo-sequence {
+  0% {
+    opacity: 0;
+    transform: scale(0.35);
+    filter: drop-shadow(0 0 0 rgb(255 255 255 / 0%));
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  5.9% {
+    opacity: 1;
+    transform: scale(0.55);
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  14.6% {
+    transform: scale(0.48);
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  22.2% {
+    transform: scale(0.58);
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  29.3% {
+    transform: scale(0.5);
+    filter: drop-shadow(0 0 6px rgb(255 255 255 / 60%));
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  43.9% {
+    transform: scale(1.25);
+    filter: drop-shadow(0 0 40px rgb(167 76 255 / 95%)) brightness(1.8);
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  52.7% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgb(167 76 255 / 70%)) brightness(1.2);
+    animation-timing-function: cubic-bezier(0.16, 0.76, 0.19, 1);
+  }
+  58.5% {
+    opacity: 1;
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgb(167 76 255 / 50%)) brightness(1);
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  73.2% {
+    opacity: 1;
+    filter: drop-shadow(0 0 70px rgb(167 76 255 / 95%)) brightness(1.8);
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40);
+    filter: drop-shadow(0 0 0 rgb(167 76 255 / 0%)) brightness(2.2);
+  }
 }
 
-@keyframes glow-pulse {
-  0%, 8% { opacity: 0; }
-  20% { opacity: 0.35; }
-  38% { opacity: 0.2; }
-  50% { opacity: 0.35; }
-  75% { opacity: 1; }
-  100% { opacity: 0.5; }
+@keyframes glow-sequence {
+  0%, 4.7% { opacity: 0; transform: scale(1); }
+  11.7% { opacity: 0.35; transform: scale(1); }
+  22.2% { opacity: 0.2; transform: scale(1); }
+  29.3% { opacity: 0.35; transform: scale(1); }
+  43.9% { opacity: 1; transform: scale(1); }
+  58.5% { opacity: 0.5; transform: scale(1); }
+  73% { opacity: 0.9; transform: scale(3); }
+  100% { opacity: 0; transform: scale(10); }
 }
 
 @keyframes curtain-fade {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  0%, 45% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Shortened, not instant: a 1ms duration doesn't skip the animation, it
+     just makes the browser resolve to an unpredictable mid-animation frame
+     depending on paint timing (verified this landing on a fully-scaled,
+     invisible end state instead of a clean settle). A brief but real
+     duration still respects "less motion" without that failure mode. */
   .logo-glow,
-  .intro-logo,
+  .intro-logo {
+    animation-duration: 500ms !important;
+    animation-delay: 0ms !important;
+  }
+
   .loading-intro--exit {
-    animation-duration: 1ms !important;
+    animation-duration: 300ms !important;
     animation-delay: 0ms !important;
   }
 }
