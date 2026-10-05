@@ -3,8 +3,11 @@ import logo from '../assets/X_WHITE.png';
 import { useEffect, useRef, useState } from "react";
 import "./LoadingIntro.css";
 
-const INTRO_DURATION = 1000;
-const REDUCED_MOTION_DURATION = 1500;
+// Both match the point in logo-sequence's timeline (in LoadingIntro.css) where
+// ignite hands off to the reveal phase, so the background curtain-fade starts
+// right as the logo finishes settling, for the current duration in each mode.
+const INTRO_DURATION = 1750; // 58.5% of the normal-motion 3000ms timeline
+const REDUCED_MOTION_DURATION = 300; // 58.5% of the reduced-motion 500ms timeline
 
 export default function LoadingIntro({ onComplete = () => {} }) {
   const [isExiting, setIsExiting] = useState(false);
